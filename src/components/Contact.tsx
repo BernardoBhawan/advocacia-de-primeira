@@ -46,7 +46,7 @@ const Contact = () => {
   ];
 
   return (
-    <section id="contato" className="py-24 md:py-32 bg-background relative overflow-hidden">
+    <section id="contato" className="py-24 md:py-32 bg-muted relative overflow-hidden">
       {/* Subtle background decoration */}
       <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-navy/5 rounded-full blur-3xl pointer-events-none" />
       
@@ -135,7 +135,7 @@ const Contact = () => {
                     animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
                     transition={{ delay: 0.7 + index * 0.1, type: 'spring' }}
                     whileHover={{ scale: 1.15, y: -3 }}
-                    className="w-12 h-12 bg-muted rounded-xl flex items-center justify-center text-muted-foreground hover:text-gold hover:bg-navy transition-all duration-300"
+                    className="w-12 h-12 bg-background rounded-xl flex items-center justify-center text-muted-foreground hover:text-gold hover:bg-navy transition-all duration-300"
                     aria-label={social.label}
                   >
                     <social.icon className="w-5 h-5" />

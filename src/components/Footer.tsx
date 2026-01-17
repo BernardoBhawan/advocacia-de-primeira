@@ -9,11 +9,13 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Logo */}
-          <img 
-            src={logo} 
-            alt="Walber Vieira Advocacia" 
-            className="h-12 brightness-0 invert"
-          />
+          <div className="bg-white rounded-lg px-4 py-2">
+            <img 
+              src={logo} 
+              alt="Walber Vieira Advocacia" 
+              className="h-10"
+            />
+          </div>
 
           {/* Social Links */}
           <div className="flex items-center gap-4">
@@ -21,7 +23,7 @@ const Footer = () => {
               href="https://wa.me/5549999219490"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 bg-navy rounded-lg flex items-center justify-center text-primary-foreground/60 hover:text-gold hover:bg-navy-dark transition-all duration-300"
+              className="w-10 h-10 bg-navy rounded-lg flex items-center justify-center text-primary-foreground/60 hover:text-gold hover:bg-navy transition-all duration-300"
               aria-label="WhatsApp"
             >
               <MessageCircle className="w-5 h-5" />
@@ -30,7 +32,7 @@ const Footer = () => {
               href="https://www.instagram.com/walbervieira.adv"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 bg-navy rounded-lg flex items-center justify-center text-primary-foreground/60 hover:text-gold hover:bg-navy-dark transition-all duration-300"
+              className="w-10 h-10 bg-navy rounded-lg flex items-center justify-center text-primary-foreground/60 hover:text-gold hover:bg-navy transition-all duration-300"
               aria-label="Instagram"
             >
               <Instagram className="w-5 h-5" />
@@ -39,7 +41,7 @@ const Footer = () => {
               href="https://www.facebook.com/walbervieira.adv"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 bg-navy rounded-lg flex items-center justify-center text-primary-foreground/60 hover:text-gold hover:bg-navy-dark transition-all duration-300"
+              className="w-10 h-10 bg-navy rounded-lg flex items-center justify-center text-primary-foreground/60 hover:text-gold hover:bg-navy transition-all duration-300"
               aria-label="Facebook"
             >
               <Facebook className="w-5 h-5" />
