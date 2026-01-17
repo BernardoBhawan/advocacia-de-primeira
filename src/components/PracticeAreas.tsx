@@ -1,5 +1,4 @@
-import { motion } from 'framer-motion';
-import { useInView } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Scale, Heart, FileText } from 'lucide-react';
 
@@ -29,21 +28,27 @@ const areas = [
 
 const AreaCard = ({ area, index }: { area: typeof areas[0]; index: number }) => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const isInView = useInView(ref, { once: true, margin: '-50px' });
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-      transition={{ duration: 0.6, delay: index * 0.2 }}
-      className="bg-card rounded-lg p-8 shadow-lg hover:shadow-xl transition-shadow group"
+      initial={{ opacity: 0, y: 60 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
+      transition={{ duration: 0.6, delay: index * 0.15, ease: 'easeOut' }}
+      whileHover={{ y: -8 }}
+      className="bg-card rounded-xl p-8 shadow-sm hover:shadow-xl transition-all duration-500 group border border-border/50"
     >
-      <div className="w-16 h-16 bg-navy rounded-lg flex items-center justify-center mb-6 group-hover:bg-gold transition-colors">
-        <area.icon className="w-8 h-8 text-gold group-hover:text-navy transition-colors" />
-      </div>
+      <motion.div 
+        initial={{ scale: 1 }}
+        whileHover={{ scale: 1.1, rotate: 5 }}
+        transition={{ type: 'spring', stiffness: 300 }}
+        className="w-16 h-16 bg-navy rounded-xl flex items-center justify-center mb-6 group-hover:bg-gold transition-colors duration-500"
+      >
+        <area.icon className="w-8 h-8 text-gold group-hover:text-navy transition-colors duration-500" />
+      </motion.div>
 
-      <h3 className="font-heading text-2xl font-bold text-foreground mb-4">
+      <h3 className="font-heading text-2xl font-bold text-foreground mb-4 group-hover:text-navy transition-colors">
         {area.title}
       </h3>
 
@@ -52,13 +57,16 @@ const AreaCard = ({ area, index }: { area: typeof areas[0]; index: number }) => 
       </p>
 
       <div className="flex flex-wrap gap-2">
-        {area.highlights.map((highlight) => (
-          <span
+        {area.highlights.map((highlight, i) => (
+          <motion.span
             key={highlight}
-            className="text-xs font-medium bg-muted text-muted-foreground px-3 py-1 rounded-full"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.4, delay: 0.5 + i * 0.1 }}
+            className="text-xs font-medium bg-muted text-muted-foreground px-3 py-1.5 rounded-full"
           >
             {highlight}
-          </span>
+          </motion.span>
         ))}
       </div>
     </motion.div>
@@ -67,24 +75,33 @@ const AreaCard = ({ area, index }: { area: typeof areas[0]; index: number }) => 
 
 const PracticeAreas = () => {
   const headerRef = useRef(null);
-  const isHeaderInView = useInView(headerRef, { once: true, margin: '-100px' });
+  const isHeaderInView = useInView(headerRef, { once: true, margin: '-50px' });
 
   return (
-    <section id="areas" className="py-20 md:py-32 bg-background">
-      <div className="container mx-auto px-4">
+    <section id="areas" className="py-24 md:py-32 bg-background relative overflow-hidden">
+      {/* Subtle background decoration */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-navy/5 rounded-full blur-3xl pointer-events-none" />
+      
+      <div className="container mx-auto px-4 relative z-10">
         <motion.div
           ref={headerRef}
-          initial={{ opacity: 0, y: 30 }}
-          animate={isHeaderInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0, y: 40 }}
+          animate={isHeaderInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+          transition={{ duration: 0.7 }}
           className="text-center max-w-2xl mx-auto mb-16"
         >
-          <p className="text-gold text-sm tracking-widest uppercase mb-4">
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={isHeaderInView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-gold text-sm tracking-[0.2em] uppercase mb-4 font-medium"
+          >
             Áreas de Atuação
-          </p>
+          </motion.p>
           <h2 className="font-heading text-3xl md:text-5xl font-bold text-foreground mb-6">
-            Mais do que advogar, nós{' '}
-            <span className="text-gold">cuidamos</span>.
+            Mais do que advogar,
+            <br />
+            nós <span className="text-gold">cuidamos</span>.
           </h2>
           <p className="text-muted-foreground text-lg">
             Oferecemos assessoria jurídica especializada com foco em soluções preventivas e resultados efetivos.
