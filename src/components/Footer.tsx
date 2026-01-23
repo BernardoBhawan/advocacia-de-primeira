@@ -1,5 +1,5 @@
 import { Instagram, Facebook, MessageCircle } from 'lucide-react';
-import logo from '@/assets/logo.png';
+import logoWhite from '@/assets/logo-white.png';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -9,13 +9,11 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Logo */}
-          <div className="bg-white rounded-lg px-4 py-2">
-            <img 
-              src={logo} 
-              alt="Walber Vieira Advocacia" 
-              className="h-10"
-            />
-          </div>
+          <img 
+            src={logoWhite} 
+            alt="Walber Vieira Advocacia" 
+            className="h-12"
+          />
 
           {/* Social Links */}
           <div className="flex items-center gap-4">

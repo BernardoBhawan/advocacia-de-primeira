@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import logo from '@/assets/logo.png';
+import logoWhite from '@/assets/logo-white.png';
+import logoBlue from '@/assets/logo-blue.png';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -34,12 +35,25 @@ const Header = () => {
       }`}
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
-        <a href="#inicio" className="flex items-center">
+        <a href="#inicio" className="flex items-center relative">
+          {/* Logo branca (visível quando não scrolled) */}
           <img 
-            src={logo} 
+            src={logoWhite} 
             alt="Walber Vieira Advocacia" 
-            className={`transition-all duration-300 ${
-              isScrolled ? 'h-10 md:h-12' : 'h-12 md:h-14'
+            className={`transition-all duration-500 ${
+              isScrolled 
+                ? 'h-10 md:h-12 opacity-0 absolute' 
+                : 'h-12 md:h-14 opacity-100'
+            }`}
+          />
+          {/* Logo azul (visível quando scrolled) */}
+          <img 
+            src={logoBlue} 
+            alt="Walber Vieira Advocacia" 
+            className={`transition-all duration-500 ${
+              isScrolled 
+                ? 'h-10 md:h-12 opacity-100' 
+                : 'h-12 md:h-14 opacity-0 absolute'
             }`}
           />
         </a>
