@@ -1,14 +1,32 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
+import { useRef } from 'react';
 
 const Hero = () => {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"]
+  });
+
+  // Different speeds for parallax layers - creates 3D depth effect
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -100]); // Subtitle - slowest
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, -200]); // Title - medium
+  const y3 = useTransform(scrollYProgress, [0, 1], [0, -300]); // Buttons - fastest
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+
   return (
     <section
+      ref={ref}
       id="inicio"
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-navy"
     >
       {/* Subtle pattern overlay */}
-      <div className="absolute inset-0 opacity-5">
+      <motion.div 
+        className="absolute inset-0 opacity-5"
+        style={{ y: useTransform(scrollYProgress, [0, 1], [0, 50]) }}
+      >
         <div 
           className="absolute inset-0" 
           style={{
@@ -16,7 +34,7 @@ const Hero = () => {
             backgroundSize: '40px 40px'
           }}
         />
-      </div>
+      </motion.div>
 
       {/* Gold accent bars */}
       <motion.div 
@@ -35,59 +53,66 @@ const Hero = () => {
       {/* Content */}
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
+          {/* Layer 1 - Subtitle (moves slowest) */}
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
+            style={{ y: y1, opacity }}
             className="text-gold text-sm md:text-base tracking-[0.3em] mb-6 uppercase font-medium"
           >
             Walber Vieira Advocacia
           </motion.p>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.5 }}
-            className="font-heading text-4xl md:text-6xl lg:text-7xl text-primary-foreground font-bold leading-tight mb-8"
-          >
-            Direito não é só para
-            <br />
-            quando há{' '}
-            <motion.span 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 1 }}
-              className="text-gold relative inline-block"
+          {/* Layer 2 - Title (moves at medium speed) */}
+          <motion.div style={{ y: y2, opacity, scale }}>
+            <motion.h1
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.5 }}
+              className="font-heading text-4xl md:text-6xl lg:text-7xl text-primary-foreground font-bold leading-tight mb-8"
             >
-              problemas
+              Direito não é só para
+              <br />
+              quando há{' '}
               <motion.span 
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 0.6, delay: 1.2 }}
-                className="absolute -bottom-2 left-0 right-0 h-1 bg-gold/30 origin-left"
-              />
-            </motion.span>.
-          </motion.h1>
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 1 }}
+                className="text-gold relative inline-block"
+              >
+                problemas
+                <motion.span 
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 0.6, delay: 1.2 }}
+                  className="absolute -bottom-2 left-0 right-0 h-1 bg-gold/30 origin-left"
+                />
+              </motion.span>.
+            </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.7 }}
-            className="text-primary-foreground/70 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
-          >
-            A consultoria jurídica preventiva evita conflitos, reduz riscos e protege seu patrimônio antes que problemas aconteçam.
-          </motion.p>
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.7 }}
+              className="text-primary-foreground/70 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
+            >
+              A consultoria jurídica preventiva evita conflitos, reduz riscos e protege seu patrimônio antes que problemas aconteçam.
+            </motion.p>
+          </motion.div>
 
+          {/* Layer 3 - Buttons (moves fastest - appears closer) */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.9 }}
+            style={{ y: y3, opacity }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <motion.a
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.98 }}
-              href="https://wa.me/5549999219490"
+              href="https://wa.me/5549999754550"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-gold text-navy font-semibold px-10 py-4 rounded-md hover:bg-gold-light transition-all duration-300 shadow-lg hover:shadow-xl"
@@ -95,7 +120,7 @@ const Hero = () => {
               Agende uma Consulta
             </motion.a>
             <motion.a
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.98 }}
               href="#areas"
               className="border-2 border-primary-foreground/20 text-primary-foreground font-semibold px-10 py-4 rounded-md hover:border-gold hover:text-gold transition-all duration-300"
@@ -112,6 +137,7 @@ const Hero = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 0.6 }}
+        style={{ opacity }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 text-primary-foreground/40 hover:text-gold transition-colors"
       >
         <motion.div
