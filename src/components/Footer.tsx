@@ -1,8 +1,37 @@
-import { Instagram, Facebook, MessageCircle } from 'lucide-react';
+import { Instagram, MessageCircle } from 'lucide-react';
+import { SiTiktok, SiLinkedin, SiYoutube } from 'react-icons/si';
 import logoWhite from '@/assets/logo-white.png';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+
+  const socialLinks = [
+    {
+      icon: MessageCircle,
+      label: 'WhatsApp',
+      href: 'https://wa.me/5549999754550',
+    },
+    {
+      icon: Instagram,
+      label: 'Instagram',
+      href: 'https://www.instagram.com/walbervieira.adv',
+    },
+    {
+      icon: SiTiktok,
+      label: 'TikTok',
+      href: 'https://www.tiktok.com/@walber.vieira?lang=pt-BR',
+    },
+    {
+      icon: SiLinkedin,
+      label: 'LinkedIn',
+      href: 'https://www.linkedin.com/in/wvieirajr/',
+    },
+    {
+      icon: SiYoutube,
+      label: 'YouTube',
+      href: 'https://www.youtube.com/@walbervieira.advocacia',
+    },
+  ];
 
   return (
     <footer className="bg-navy-dark py-12">
@@ -17,33 +46,18 @@ const Footer = () => {
 
           {/* Social Links */}
           <div className="flex items-center gap-4">
-            <a
-              href="https://wa.me/5549999219490"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 bg-navy rounded-lg flex items-center justify-center text-primary-foreground/60 hover:text-gold hover:bg-navy transition-all duration-300"
-              aria-label="WhatsApp"
-            >
-              <MessageCircle className="w-5 h-5" />
-            </a>
-            <a
-              href="https://www.instagram.com/walbervieira.adv"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 bg-navy rounded-lg flex items-center justify-center text-primary-foreground/60 hover:text-gold hover:bg-navy transition-all duration-300"
-              aria-label="Instagram"
-            >
-              <Instagram className="w-5 h-5" />
-            </a>
-            <a
-              href="https://www.facebook.com/walbervieira.adv"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 bg-navy rounded-lg flex items-center justify-center text-primary-foreground/60 hover:text-gold hover:bg-navy transition-all duration-300"
-              aria-label="Facebook"
-            >
-              <Facebook className="w-5 h-5" />
-            </a>
+            {socialLinks.map((social) => (
+              <a
+                key={social.label}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-navy rounded-lg flex items-center justify-center text-primary-foreground/60 hover:text-gold hover:bg-navy transition-all duration-300"
+                aria-label={social.label}
+              >
+                <social.icon className="w-5 h-5" />
+              </a>
+            ))}
           </div>
         </div>
 

@@ -1,6 +1,7 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { MessageCircle, Instagram, Facebook, MapPin, Phone, Mail } from 'lucide-react';
+import { MessageCircle, Instagram, MapPin, Phone, Mail } from 'lucide-react';
+import { SiTiktok, SiLinkedin, SiYoutube } from 'react-icons/si';
 
 const Contact = () => {
   const ref = useRef(null);
@@ -10,7 +11,7 @@ const Contact = () => {
     {
       icon: MessageCircle,
       label: 'WhatsApp',
-      href: 'https://wa.me/5549999219490',
+      href: 'https://wa.me/5549999754550',
     },
     {
       icon: Instagram,
@@ -18,9 +19,19 @@ const Contact = () => {
       href: 'https://www.instagram.com/walbervieira.adv',
     },
     {
-      icon: Facebook,
-      label: 'Facebook',
-      href: 'https://www.facebook.com/walbervieira.adv',
+      icon: SiTiktok,
+      label: 'TikTok',
+      href: 'https://www.tiktok.com/@walber.vieira?lang=pt-BR',
+    },
+    {
+      icon: SiLinkedin,
+      label: 'LinkedIn',
+      href: 'https://www.linkedin.com/in/wvieirajr/',
+    },
+    {
+      icon: SiYoutube,
+      label: 'YouTube',
+      href: 'https://www.youtube.com/@walbervieira.advocacia',
     },
   ];
 
@@ -28,8 +39,8 @@ const Contact = () => {
     {
       icon: Phone,
       title: 'Telefone / WhatsApp',
-      content: '+55 (49) 99921-9490',
-      href: 'https://wa.me/5549999219490',
+      content: '+55 (49) 99975-4550',
+      href: 'https://wa.me/5549999754550',
     },
     {
       icon: Mail,
@@ -124,7 +135,7 @@ const Contact = () => {
               className="pt-6 border-t border-border"
             >
               <h3 className="font-semibold text-foreground mb-4">Redes Sociais</h3>
-              <div className="flex gap-4">
+              <div className="flex gap-4 flex-wrap">
                 {socialLinks.map((social, index) => (
                   <motion.a
                     key={social.label}
@@ -169,7 +180,7 @@ const Contact = () => {
             <motion.a
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
-              href="https://wa.me/5549999219490?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta%20jurídica."
+              href="https://wa.me/5549999754550?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta%20jurídica."
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 bg-gold text-navy font-semibold px-8 py-4 rounded-lg hover:bg-gold-light transition-all duration-300 shadow-lg"
