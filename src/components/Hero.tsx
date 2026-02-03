@@ -1,20 +1,32 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 
 const Hero = () => {
   const ref = useRef<HTMLElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"]
   });
 
-  // Different speeds for parallax layers - creates 3D depth effect
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, -100]); // Subtitle - slowest
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, -200]); // Title - medium
-  const y3 = useTransform(scrollYProgress, [0, 1], [0, -300]); // Buttons - fastest
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+  // Reduced parallax on mobile for better performance
+  const m = isMobile ? 0.4 : 1;
+
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -80 * m]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, -160 * m]);
+  const y3 = useTransform(scrollYProgress, [0, 1], [0, -240 * m]);
+  const bgY = useTransform(scrollYProgress, [0, 1], [0, 100 * m]);
+  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.6], [1, 0.92]);
 
   return (
     <section
@@ -22,10 +34,10 @@ const Hero = () => {
       id="inicio"
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-navy"
     >
-      {/* Subtle pattern overlay */}
+      {/* Subtle pattern overlay with parallax */}
       <motion.div 
         className="absolute inset-0 opacity-5"
-        style={{ y: useTransform(scrollYProgress, [0, 1], [0, 50]) }}
+        style={{ y: bgY }}
       >
         <div 
           className="absolute inset-0" 
@@ -53,7 +65,7 @@ const Hero = () => {
       {/* Content */}
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
-          {/* Layer 1 - Subtitle (moves slowest) */}
+          {/* Layer 1 - Subtitle (moves slowest - appears furthest) */}
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -101,7 +113,7 @@ const Hero = () => {
             </motion.p>
           </motion.div>
 
-          {/* Layer 3 - Buttons (moves fastest - appears closer) */}
+          {/* Layer 3 - Buttons (moves fastest - appears closest) */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}

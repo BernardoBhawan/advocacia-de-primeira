@@ -1,5 +1,5 @@
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion, useInView, useScroll, useTransform } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
 import { Award, Users, Clock, Shield } from 'lucide-react';
 
 const stats = [
@@ -10,15 +10,40 @@ const stats = [
 ];
 
 const About = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const sectionRef = useRef<HTMLElement>(null);
+  const contentRef = useRef(null);
+  const isInView = useInView(contentRef, { once: true, margin: '-100px' });
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+
+  const m = isMobile ? 0.3 : 1;
+  const textY = useTransform(scrollYProgress, [0, 1], [80 * m, -80 * m]);
+  const statsY = useTransform(scrollYProgress, [0, 1], [120 * m, -120 * m]);
+  const bgY = useTransform(scrollYProgress, [0, 1], [-50 * m, 50 * m]);
+  const decorScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.8]);
 
   return (
-    <section id="sobre" className="py-24 md:py-32 bg-navy relative overflow-hidden">
-      {/* Decorative elements */}
+    <section 
+      ref={sectionRef}
+      id="sobre" 
+      className="py-24 md:py-32 bg-navy relative overflow-hidden"
+    >
+      {/* Decorative elements with parallax */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={isInView ? { opacity: 0.1 } : { opacity: 0 }}
+        style={{ y: bgY, scale: decorScale }}
         className="absolute right-0 top-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold rounded-full blur-3xl pointer-events-none"
       />
       
@@ -32,11 +57,14 @@ const About = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
+          {/* Text content with parallax */}
           <motion.div
-            ref={ref}
+            ref={contentRef}
             initial={{ opacity: 0, x: -60 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -60 }}
             transition={{ duration: 0.7 }}
+            style={{ y: textY }}
+            className="will-change-transform"
           >
             <motion.p 
               initial={{ opacity: 0 }}
@@ -88,7 +116,7 @@ const About = () => {
               className="mt-8"
             >
               <motion.a
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 href="https://wa.me/5549999754550"
                 target="_blank"
@@ -100,11 +128,13 @@ const About = () => {
             </motion.div>
           </motion.div>
 
+          {/* Stats with faster parallax (closer layer) */}
           <motion.div
             initial={{ opacity: 0, x: 60 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 60 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="grid grid-cols-2 gap-6"
+            style={{ y: statsY }}
+            className="grid grid-cols-2 gap-6 will-change-transform"
           >
             {stats.map((stat, index) => (
               <motion.div
