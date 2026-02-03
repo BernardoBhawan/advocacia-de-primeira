@@ -4,25 +4,25 @@ import { Scale, Heart, FileText } from 'lucide-react';
 
 const areas = [
   {
-    icon: Scale,
-    title: 'Direito do Consumidor',
-    description:
-      'Defesa dos seus direitos nas relações de consumo. Atuamos em casos de cobranças indevidas, produtos defeituosos, contratos abusivos e problemas com fornecedores de serviços.',
-    highlights: ['Cobranças Indevidas', 'Contratos Abusivos', 'Produtos Defeituosos'],
-  },
-  {
     icon: Heart,
     title: 'Direito Médico',
     description:
-      'Assessoria jurídica especializada para profissionais da saúde e pacientes. Tratamos de responsabilidade civil médica, erro médico, consentimento informado e regulamentação sanitária.',
-    highlights: ['Erro Médico', 'Responsabilidade Civil', 'Consentimento Informado'],
+      'Atuamos simultaneamente na proteção dos direitos dos pacientes diante de negativas de procedimentos cirúrgicos e de fornecimento de medicamentos por planos de saúde ou pelo poder público, e na defesa dos interesses dos profissionais da saúde, com orientação preventiva e atuação estratégica em questões éticas, administrativas e judiciais.',
+    highlights: ['Negativas de Planos', 'Defesa de Profissionais', 'Questões Éticas'],
+  },
+  {
+    icon: Scale,
+    title: 'Direito do Consumidor',
+    description:
+      'Defendemos consumidores e empresas em relações de consumo, garantindo equilíbrio contratual, transparência e boa-fé. Nossa atuação abrange revisão de contratos, práticas abusivas, indenizações e defesa em processos administrativos e judiciais, buscando soluções eficientes e fundamentadas.',
+    highlights: ['Revisão de Contratos', 'Práticas Abusivas', 'Indenizações'],
   },
   {
     icon: FileText,
-    title: 'Direito Civil',
+    title: 'Direito Civil e Contratos',
     description:
-      'Atuação abrangente em questões patrimoniais, familiares e contratuais. Protegemos seus direitos em inventários, contratos, responsabilidade civil e disputas patrimoniais.',
-    highlights: ['Contratos', 'Inventários', 'Responsabilidade Civil'],
+      'Oferecemos assessoria completa em direito civil, com destaque para elaboração, revisão e gestão de contratos. Trabalhamos na prevenção de litígios, na negociação de acordos e na resolução de conflitos patrimoniais e obrigacionais, sempre com estratégia técnica e resultados práticos.',
+    highlights: ['Elaboração de Contratos', 'Prevenção de Litígios', 'Conflitos Patrimoniais'],
   },
 ];
 

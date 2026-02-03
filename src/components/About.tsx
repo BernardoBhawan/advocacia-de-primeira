@@ -47,7 +47,7 @@ const About = () => {
               Sobre Nós
             </motion.p>
             <h2 className="font-heading text-3xl md:text-5xl font-bold text-primary-foreground mb-2">
-              Walber Vieira
+              Walber Pinto Vieira Junior
             </h2>
             <motion.div 
               initial={{ scaleX: 0 }}
@@ -90,7 +90,7 @@ const About = () => {
               <motion.a
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
-                href="https://wa.me/5549999219490"
+                href="https://wa.me/5549999754550"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block bg-gold text-navy font-semibold px-8 py-4 rounded-md hover:bg-gold-light transition-all duration-300 shadow-lg"
