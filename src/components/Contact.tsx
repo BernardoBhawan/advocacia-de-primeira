@@ -1,11 +1,31 @@
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion, useInView, useScroll, useTransform } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
 import { MessageCircle, Instagram, MapPin, Phone, Mail } from 'lucide-react';
 import { SiTiktok, SiLinkedin, SiYoutube } from 'react-icons/si';
 
 const Contact = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-50px' });
+  const sectionRef = useRef<HTMLElement>(null);
+  const contentRef = useRef(null);
+  const isInView = useInView(contentRef, { once: true, margin: '-50px' });
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+
+  const m = isMobile ? 0.3 : 1;
+  const headerY = useTransform(scrollYProgress, [0, 1], [60 * m, -60 * m]);
+  const leftY = useTransform(scrollYProgress, [0, 1], [80 * m, -80 * m]);
+  const rightY = useTransform(scrollYProgress, [0, 1], [120 * m, -120 * m]);
+  const bgY = useTransform(scrollYProgress, [0, 1], [-30 * m, 30 * m]);
 
   const socialLinks = [
     {
@@ -57,17 +77,26 @@ const Contact = () => {
   ];
 
   return (
-    <section id="contato" className="py-24 md:py-32 bg-muted relative overflow-hidden">
-      {/* Subtle background decoration */}
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-navy/5 rounded-full blur-3xl pointer-events-none" />
+    <section 
+      ref={sectionRef}
+      id="contato" 
+      className="py-24 md:py-32 bg-muted relative overflow-hidden"
+    >
+      {/* Subtle background decoration with parallax */}
+      <motion.div 
+        className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-navy/5 rounded-full blur-3xl pointer-events-none"
+        style={{ y: bgY }}
+      />
       
       <div className="container mx-auto px-4 relative z-10">
+        {/* Header with parallax */}
         <motion.div
-          ref={ref}
+          ref={contentRef}
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
           transition={{ duration: 0.7 }}
-          className="text-center max-w-2xl mx-auto mb-16"
+          style={{ y: headerY }}
+          className="text-center max-w-2xl mx-auto mb-16 will-change-transform"
         >
           <motion.p 
             initial={{ opacity: 0 }}
@@ -88,12 +117,13 @@ const Contact = () => {
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
-          {/* Contact Info */}
+          {/* Contact Info with parallax */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="space-y-8"
+            style={{ y: leftY }}
+            className="space-y-8 will-change-transform"
           >
             {contactItems.map((item, index) => (
               <motion.div
@@ -156,13 +186,14 @@ const Contact = () => {
             </motion.div>
           </motion.div>
 
-          {/* CTA Card */}
+          {/* CTA Card with faster parallax (closer layer) */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
             transition={{ duration: 0.6, delay: 0.4 }}
+            style={{ y: rightY }}
             whileHover={{ scale: 1.02 }}
-            className="bg-navy rounded-2xl p-8 md:p-12 text-center shadow-2xl"
+            className="bg-navy rounded-2xl p-8 md:p-12 text-center shadow-2xl will-change-transform"
           >
             <motion.div
               initial={{ scale: 0 }}
@@ -178,7 +209,7 @@ const Contact = () => {
               Clique no botão abaixo para falar diretamente conosco pelo WhatsApp. Resposta rápida e atendimento personalizado.
             </p>
             <motion.a
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.98 }}
               href="https://wa.me/5549999754550?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta%20jurídica."
               target="_blank"

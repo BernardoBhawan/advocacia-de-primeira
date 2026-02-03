@@ -1,5 +1,5 @@
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion, useInView, useScroll, useTransform } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
 import { Scale, Heart, FileText } from 'lucide-react';
 
 const areas = [
@@ -26,9 +26,18 @@ const areas = [
   },
 ];
 
-const AreaCard = ({ area, index }: { area: typeof areas[0]; index: number }) => {
+const AreaCard = ({ area, index, isMobile }: { area: typeof areas[0]; index: number; isMobile: boolean }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-50px' });
+  
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
+
+  const m = isMobile ? 0.3 : 1;
+  const y = useTransform(scrollYProgress, [0, 1], [40 * m, -40 * m]);
+  const rotate = useTransform(scrollYProgress, [0, 0.5, 1], [-1 * m, 0, 1 * m]);
 
   return (
     <motion.div
@@ -36,8 +45,9 @@ const AreaCard = ({ area, index }: { area: typeof areas[0]; index: number }) => 
       initial={{ opacity: 0, y: 60 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
       transition={{ duration: 0.6, delay: index * 0.15, ease: 'easeOut' }}
-      whileHover={{ y: -8 }}
-      className="bg-card rounded-xl p-8 shadow-sm hover:shadow-xl transition-all duration-500 group border border-border/50"
+      style={{ y, rotateX: rotate }}
+      whileHover={{ y: -8, scale: 1.02 }}
+      className="bg-card rounded-xl p-8 shadow-sm hover:shadow-xl transition-all duration-500 group border border-border/50 will-change-transform"
     >
       <motion.div 
         initial={{ scale: 1 }}
@@ -74,13 +84,38 @@ const AreaCard = ({ area, index }: { area: typeof areas[0]; index: number }) => 
 };
 
 const PracticeAreas = () => {
+  const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef(null);
   const isHeaderInView = useInView(headerRef, { once: true, margin: '-50px' });
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+
+  const m = isMobile ? 0.3 : 1;
+  const headerY = useTransform(scrollYProgress, [0, 1], [60 * m, -60 * m]);
+  const bgY = useTransform(scrollYProgress, [0, 1], [0, -100 * m]);
 
   return (
-    <section id="areas" className="py-24 md:py-32 bg-background relative overflow-hidden">
-      {/* Subtle background decoration */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-navy/5 rounded-full blur-3xl pointer-events-none" />
+    <section 
+      ref={sectionRef}
+      id="areas" 
+      className="py-24 md:py-32 bg-background relative overflow-hidden"
+    >
+      {/* Subtle background decoration with parallax */}
+      <motion.div 
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-navy/5 rounded-full blur-3xl pointer-events-none"
+        style={{ y: bgY }}
+      />
       
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
@@ -88,6 +123,7 @@ const PracticeAreas = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={isHeaderInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
           transition={{ duration: 0.7 }}
+          style={{ y: headerY }}
           className="text-center max-w-2xl mx-auto mb-16"
         >
           <motion.p 
@@ -110,7 +146,7 @@ const PracticeAreas = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {areas.map((area, index) => (
-            <AreaCard key={area.title} area={area} index={index} />
+            <AreaCard key={area.title} area={area} index={index} isMobile={isMobile} />
           ))}
         </div>
       </div>
