@@ -14,7 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      contact_submissions: {
+        Row: {
+          area_direito: string
+          cidade_estado: string
+          created_at: string
+          descricao: string
+          email: string
+          id: string
+          nome: string
+          processo_andamento: string
+          urgencia: string
+          whatsapp: string
+        }
+        Insert: {
+          area_direito: string
+          cidade_estado: string
+          created_at?: string
+          descricao: string
+          email: string
+          id?: string
+          nome: string
+          processo_andamento: string
+          urgencia: string
+          whatsapp: string
+        }
+        Update: {
+          area_direito?: string
+          cidade_estado?: string
+          created_at?: string
+          descricao?: string
+          email?: string
+          id?: string
+          nome?: string
+          processo_andamento?: string
+          urgencia?: string
+          whatsapp?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
