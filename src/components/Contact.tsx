@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 const contactSchema = z.object({
   nome: z.string().trim().min(1, 'Campo obrigatório').max(100),
@@ -73,20 +74,20 @@ const Contact = () => {
   const rightY = useTransform(scrollYProgress, [0, 1], [120 * m, -120 * m]);
   const bgY = useTransform(scrollYProgress, [0, 1], [-30 * m, 30 * m]);
 
-  const onSubmit = (data: ContactForm) => {
-    const message = `*Solicitação de Análise Inicial*%0A%0A` +
-      `*Nome:* ${encodeURIComponent(data.nome)}%0A` +
-      `*WhatsApp:* ${encodeURIComponent(data.whatsapp)}%0A` +
-      `*E-mail:* ${encodeURIComponent(data.email)}%0A` +
-      `*Cidade/Estado:* ${encodeURIComponent(data.cidadeEstado)}%0A` +
-      `*Área do Direito:* ${encodeURIComponent(data.areaDireito)}%0A` +
-      `*Processo em andamento:* ${encodeURIComponent(data.processoAndamento)}%0A` +
-      `*Urgência:* ${encodeURIComponent(data.urgencia)}%0A%0A` +
-      `*Descrição:* ${encodeURIComponent(data.descricao)}`;
+  const onSubmit = async (data: ContactForm) => {
+    try {
+      const { data: response, error } = await supabase.functions.invoke('send-whatsapp-notification', {
+        body: data,
+      });
 
-    window.open(`https://wa.me/5549999754550?text=${message}`, '_blank');
-    toast.success('Formulário enviado! Você será redirecionado ao WhatsApp.');
-    reset();
+      if (error) throw error;
+
+      toast.success('Formulário enviado com sucesso! Nossa equipe entrará em contato em breve.');
+      reset();
+    } catch (err) {
+      console.error('Erro ao enviar formulário:', err);
+      toast.error('Erro ao enviar formulário. Tente novamente.');
+    }
   };
 
   const socialLinks = [
