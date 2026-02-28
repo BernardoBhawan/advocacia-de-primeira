@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
 
 const contactSchema = z.object({
   nome: z.string().trim().min(1, 'Campo obrigatório').max(100),
@@ -76,11 +75,25 @@ const Contact = () => {
 
   const onSubmit = async (data: ContactForm) => {
     try {
-      const { data: response, error } = await supabase.functions.invoke('send-whatsapp-notification', {
-        body: data,
+      const formBody = new FormData();
+      formBody.append('Nome', data.nome);
+      formBody.append('WhatsApp', data.whatsapp);
+      formBody.append('Email', data.email);
+      formBody.append('Cidade/Estado', data.cidadeEstado);
+      formBody.append('Área do Direito', data.areaDireito);
+      formBody.append('Processo em andamento', data.processoAndamento);
+      formBody.append('Descrição', data.descricao);
+      formBody.append('Urgência', data.urgencia);
+      formBody.append('_subject', 'Nova Solicitação de Análise - Site');
+      formBody.append('_captcha', 'false');
+      formBody.append('_template', 'table');
+
+      const response = await fetch('https://formsubmit.co/ajax/walbervieira@gmail.com', {
+        method: 'POST',
+        body: formBody,
       });
 
-      if (error) throw error;
+      if (!response.ok) throw new Error('Falha no envio');
 
       toast.success('Formulário enviado com sucesso! Nossa equipe entrará em contato em breve.');
       reset();
