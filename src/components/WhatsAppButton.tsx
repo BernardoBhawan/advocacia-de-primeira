@@ -12,7 +12,7 @@ const WhatsAppButton = () => {
       transition={{ delay: 1, type: 'spring', stiffness: 200 }}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
-      className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-lg hover:bg-green-600 transition-colors"
+      className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-lg hover:bg-green-600 transition-colors md:hidden"
       aria-label="Falar pelo WhatsApp"
     >
       <MessageCircle className="w-7 h-7 text-white" />
